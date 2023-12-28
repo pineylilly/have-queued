@@ -1,16 +1,20 @@
 class QueuePerson {
-    public id: string
+    public uuid: string
     public name: string
-    public isCompleted: boolean
+    public status: number
 
-    constructor(id: string, name: string) {
-        this.id = id
+    constructor(uuid: string, name: string) {
+        this.uuid = uuid
         this.name = name
-        this.isCompleted = false
+        this.status = 0
+    }
+
+    inQueue() {
+        this.status = 1
     }
 
     complete() {
-        this.isCompleted = true
+        this.status = 2
     }
 }
 

@@ -1,11 +1,15 @@
 import { createRoom } from "../../utils/room"
+import { useNavigate } from "react-router-dom";
 
 
 const Home = () => {
 
+  const navigate = useNavigate();
+
   async function handleCreateRoom() {
     const room = await createRoom()
     console.log(room)
+    navigate('/host/' + room.id)
   }
 
   return (

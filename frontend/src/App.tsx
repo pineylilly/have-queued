@@ -5,6 +5,9 @@ import logo from './logo.svg';
 import './App.css';
 import Home from './components/Home/Home';
 import { generateUUID } from './utils/uuid';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import HostPage from './components/Host/HostPage';
+import JoinPage from './components/Join/JoinPage';
 
 function App() {
 
@@ -16,7 +19,15 @@ function App() {
   }, [])
 
   return (
-    <Home />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/host/:roomid' element={<HostPage />} />
+        <Route path='/join/:roomid' element={<JoinPage />} />
+        <Route path='*' element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+    
   );
 }
 

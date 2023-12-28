@@ -14,7 +14,11 @@ class RoomList {
     }
 
     find(id: string) {
-        
+        const room = this.list.find((e) => e.id === id)
+        if (room) {
+            return room
+        }
+        return { status: 404 }
     }
 }
 
