@@ -60,6 +60,7 @@ app.put('/rooms/:id/queue/add', function (req, res) {
 
     room.addQueue(new QueuePerson(body.uuid, body.name))
 
+    io.emit(`room${req.params.id}:update`, room);
     res.send({status: 200, message: "Success"})
 
 })
@@ -67,10 +68,6 @@ app.put('/rooms/:id/queue/add', function (req, res) {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-
-    socket.on('joinRoom', (room) => {
-        socket.join(room)
-    })
 
     socket.on('disconnect', () => {
         console.log('user disconnected');

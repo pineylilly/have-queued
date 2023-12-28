@@ -1,8 +1,8 @@
 export interface IQueue {
     id: string,
     host: string,
-    queue: string,
-    currentQueue: IQueuePerson[],
+    queue: IQueuePerson[],
+    currentQueue: number,
     created: number
 }
 

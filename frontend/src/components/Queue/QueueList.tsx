@@ -11,12 +11,16 @@ const QueueList = () => {
     
     let { roomid } = useParams()
 
-    
-
     const navigate = useNavigate();
 
     const [queue, setQueue] = useState<IQueuePerson[]>([])
 
+
+    function updateRoom(room: IQueue) {
+        setQueue(room.queue)
+    }
+
+    // Init render
     useEffect(() => {
         getRoom(roomid || "").then((roomJson) => {
             if (roomJson.status && roomJson.status === 404) {
@@ -26,13 +30,15 @@ const QueueList = () => {
                 navigate('/')
             }
             else {
-                setQueue(roomJson.queue)
+                updateRoom(roomJson as IQueue)
             }
         })
     }, [])
 
+    // socket.io connection
     useEffect(() => {
         socket.on('connection', () => console.log('socket connected'))
+        socket.on(`room${roomid}:update`, (room: IQueue) => updateRoom(room))
     }, [])
 
   return (
