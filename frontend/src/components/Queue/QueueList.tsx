@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
 import QueueMemberBox from './QueueMemberBox'
@@ -11,17 +11,35 @@ const QueueList = () => {
     
     let { roomid } = useParams()
 
+    const initDataRef = useRef(false)
+
     const navigate = useNavigate();
 
     const [queue, setQueue] = useState<IQueuePerson[]>([])
+    const [currentQueue, setCurrentQueue] = useState<number>(-1)
 
 
     function updateRoom(room: IQueue) {
         setQueue(room.queue)
+        setCurrentQueue(room.currentQueue)
+    }
+
+    function nextQueue() {
+        setCurrentQueue(currentQueue + 1)
+        socket.emit('room:currentQueueUpdate', roomid, 1)
+    }
+
+    function undoQueue() {
+        setCurrentQueue(currentQueue - 1)
+        socket.emit('room:currentQueueUpdate', roomid, -1)
     }
 
     // Init render
     useEffect(() => {
+        if (initDataRef.current === true) {
+            return
+        }
+        initDataRef.current = true
         getRoom(roomid || "").then((roomJson) => {
             if (roomJson.status && roomJson.status === 404) {
                 navigate('/')
@@ -42,12 +60,61 @@ const QueueList = () => {
     }, [])
 
   return (
-    <div className="w-full h-full flex flex-col gap-3 justify-center items-center">
-        {
-            queue.map((q, idx) => {
-                return <QueueMemberBox key={idx} order={idx+1} name={q.name} status={q.status} />
-            })
-        }
+    <div className="relative w-full h-full flex flex-col justify-center items-center overflow-hidden px-4">
+        <div className="w-full h-full overflow-auto invisible-scroll scroll-smooth">
+            <div className="w-full flex flex-col justify-center items-center flex-nowrap gap-3 snap-y snap-mandatory py-[calc(50vh-48px)]">
+                {
+                    (queue.length > 0) ?
+                    queue.map((q, idx) => {
+                        return <QueueMemberBox key={idx} order={idx+1} name={q.name} status={(currentQueue < idx) ? 0 : (currentQueue === idx) ? 1 : 2} />
+                    })
+                    : <div className="w-full h-screen flex justify-center items-center text-lg font-bold">The queue is empty...</div>
+                }
+            </div>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#FFF3DA] from-30% z-10 flex justify-center items-center gap-8">
+            {
+                (currentQueue >= 0) ?
+                <button 
+                    className="w-24 h-fit text-white bg-[#9479f6] hover:bg-[#ab96f6] transition-colors font-medium rounded-lg text-sm px-5 py-2.5 mb-2" 
+                    onClick={undoQueue}
+                    >
+                    Undo
+                </button>
+                : <button 
+                    className="w-24 h-fit text-white bg-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2" 
+                    disabled={true}
+                    >
+                    Undo
+                </button>
+            }
+            {
+                (currentQueue < queue.length && queue.length > 0) ?
+                <button 
+                    className="w-24 h-fit text-white bg-[#9479f6] hover:bg-[#ab96f6] transition-colors font-medium rounded-lg text-sm px-5 py-2.5 mb-2" 
+                    onClick={nextQueue}
+                    >
+                    {(currentQueue === -1) ? "Start" : "Next"}
+                </button>
+                : <button 
+                    className="w-24 h-fit text-white bg-slate-300 transition-colors font-medium rounded-lg text-sm px-5 py-2.5 mb-2" 
+                    disabled={true}
+                    >
+                    {(currentQueue === -1) ? "Start" : "Next"}
+                </button>
+            }
+            
+        </div>
+        {/* <div className="w-full flex flex-col gap-3 justify-center items-center snap-y snap-mandatory overflow-auto">
+            {
+                queue.map((q, idx) => {
+                    return <QueueMemberBox key={idx} order={idx+1} name={q.name} status={q.status} />
+                })
+            }
+        </div> */}
+     
+        
+        
     </div>
   )
 }

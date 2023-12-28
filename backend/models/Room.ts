@@ -12,7 +12,7 @@ class Room {
         this.id = generateID()
         this.host = host
         this.queue = []
-        this.currentQueue = 0
+        this.currentQueue = -1
         this.created = Date.now()
     }
 

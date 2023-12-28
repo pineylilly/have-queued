@@ -72,11 +72,17 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
+
+    socket.on("room:currentQueueUpdate", (roomid, increment) => {
+        console.log("currentQueue Update: " + roomid)
+        const room = roomList.find(roomid)
+        if (!(room instanceof Room)) {
+            return
+        }
+        room.currentQueue += increment
+        io.emit(`room${roomid}:update`, room);
+    });
 });
-
-
-
-
 
   
 server.listen(port, function () {

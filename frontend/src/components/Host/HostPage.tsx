@@ -24,7 +24,7 @@ const HostPage = () => {
               {`${process.env.REACT_APP_PUBLIC_URL}/join/${roomid}`}
             </div>
         </div>
-        <div className="flex flex-col w-2/3 h-full justify-center content-center bg-[#FFF3DA] gap-3">
+        <div className="flex flex-col w-full md:w-2/3 h-full justify-center content-center bg-[#FFF3DA] gap-3">
             <QueueList />
         </div>
     </div>
