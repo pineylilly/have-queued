@@ -21,14 +21,14 @@ const JoinStatus = () => {
       setQueue(room.queue)
       setCurrentQueue(room.currentQueue)
       setOwnQueue(room.queue.findIndex((e) => e.uuid === getUUID()))
-  }
+    }
 
     // Init render
     useEffect(() => {
-      if (initDataRef.current === true) {
-          return
-      }
-      initDataRef.current = true
+      // if (initDataRef.current === true) {
+      //     return
+      // }
+      // initDataRef.current = true
       getRoom(roomid || "").then((roomJson) => {
           if (roomJson.status && roomJson.status === 404) {
               navigate('/')
@@ -45,15 +45,41 @@ const JoinStatus = () => {
     }, [])
 
   return (
-    <div className="flex flex-col w-full h-full justify-center items-center bg-[#FFF3DA] gap-3">
+    <div className="flex flex-col w-full h-full justify-center items-center bg-[#FFF3DA] gap-6">
         {
           (currentQueue <= ownQueue) && <>
             <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
-                You are in queue <span className="text-[#9479f6]"> #{ownQueue + 1} </span> out of {queue.length}
+                You are in queue&nbsp;<span className="text-[#9479f6]">#{ownQueue + 1}</span>&nbsp;out of {queue.length}
             </div>
-            <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
+            {/* <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
                 Current Queue: #{currentQueue + 1}
+            </div> */}
+            <div className="relative w-96 h-4 mb-4 bg-slate-300 rounded-full ">
+              <div 
+                className="h-4 bg-gradient-to-r from-[#D0BFFF] to-[#BEADFA] rounded-full transition-all" 
+                style={{width: (queue.length > 0) ? `${(currentQueue + 1)*100/(ownQueue + 1)}%` : "0%"}}>
+              </div>
+              <div 
+                className="absolute top-5 -translate-x-1/2 transition-all font-semibold text-[#9479f6]"
+                style={{left: (queue.length > 0) ? `${(currentQueue + 1)*100/(ownQueue + 1)}%` : "0%"}}>
+                {currentQueue + 1}
+              </div>
+              <div 
+                className="absolute right-0 -top-6 font-semibold text-[#9479f6]">
+                You: #{ownQueue + 1}
+              </div>
             </div>
+            {
+              (currentQueue === ownQueue) ? 
+              <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
+                It's your turn!
+              </div>
+              :
+              <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
+                {ownQueue - currentQueue} queue{(ownQueue - currentQueue > 1) && "s"} left before you
+              </div>
+            }
+            
           </>
         }
         

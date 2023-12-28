@@ -68,7 +68,7 @@ const QueueList = () => {
                     queue.map((q, idx) => {
                         return <QueueMemberBox key={idx} order={idx+1} name={q.name} status={(currentQueue < idx) ? 0 : (currentQueue === idx) ? 1 : 2} />
                     })
-                    : <div className="w-full h-screen flex justify-center items-center text-lg font-bold">The queue is empty...</div>
+                    : <div className="w-full flex justify-center items-center text-lg font-bold">The queue is empty...</div>
                 }
             </div>
         </div>
