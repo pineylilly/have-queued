@@ -48,7 +48,7 @@ const JoinStatus = () => {
     <div className="flex flex-col w-full h-full justify-center items-center bg-[#FFF3DA] gap-6">
         {
           (currentQueue <= ownQueue) && <>
-            <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
+            <div className="w-full flex justify-center px-4 font-bold text-xl text-center mb-3">
                 You are in queue&nbsp;<span className="text-[#9479f6]">#{ownQueue + 1}</span>&nbsp;out of {queue.length}
             </div>
             {/* <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
@@ -80,6 +80,16 @@ const JoinStatus = () => {
               </div>
             }
             
+          </>
+        }
+        {
+          (currentQueue > ownQueue) && <>
+            <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
+              You are done!
+            </div>
+            <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
+              Thank you for participating
+            </div>
           </>
         }
         
