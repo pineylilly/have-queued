@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { LuUser2 } from "react-icons/lu"
 import { joinRoom } from '../../utils/room'
 import { useParams } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
 
 const JoinForm = ({handleFormDone}: {handleFormDone: () => void}) => {
 
@@ -11,7 +12,7 @@ const JoinForm = ({handleFormDone}: {handleFormDone: () => void}) => {
  
     function handleJoinRoom() {
         if (!name) {
-            alert("Please fill name")
+            toast("Please fill name")
             return
         }
         joinRoom(roomid || "", name)
@@ -41,6 +42,18 @@ const JoinForm = ({handleFormDone}: {handleFormDone: () => void}) => {
                 >
                 Join
             </button>
+            <ToastContainer
+                position="top-center"
+                autoClose={500}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
         </div>
   )
 }

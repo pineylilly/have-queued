@@ -6,7 +6,7 @@ import QueueList from '../Queue/QueueList';
 import { MdContentCopy, MdOutlineQrCode2 } from "react-icons/md";
 import copy from 'copy-to-clipboard';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 const HostPage = () => {
 

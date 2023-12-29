@@ -30,3 +30,23 @@ code {
   scrollbar-width: none;  /* Firefox */
 }
 
+.animate-float {
+  animation: float 6s infinite
+}
+
+@keyframes float {
+    0% {
+      transform: translatey(-10%);
+      animation-timing-function: ease-in-out;
+    }
+    50% {
+      transform: translatey(10%);
+      animation-timing-function: ease-in-out;
+    }
+    100% {
+      transform: translatey(-10%);
+      animation-timing-function: ease-in-out;
+    }
+  }
+
+
