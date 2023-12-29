@@ -25,11 +25,20 @@ const QueueList = () => {
     }
 
     function nextQueue() {
+        const element = document.getElementById("queue" + (currentQueue+1 + 1));
+        if (element) {
+            element.scrollIntoView({behavior: "smooth", block: "center"});
+        }
         setCurrentQueue(currentQueue + 1)
         socket.emit('room:currentQueueUpdate', roomid, 1)
+        
     }
 
     function undoQueue() {
+        const element = document.getElementById("queue" + (currentQueue+1 - 1));
+        if (element) {
+            element.scrollIntoView({behavior: "smooth", block: "center"});
+        }
         setCurrentQueue(currentQueue - 1)
         socket.emit('room:currentQueueUpdate', roomid, -1)
     }
@@ -105,13 +114,15 @@ const QueueList = () => {
             }
             
         </div>
-        {/* <div className="w-full flex flex-col gap-3 justify-center items-center snap-y snap-mandatory overflow-auto">
-            {
-                queue.map((q, idx) => {
-                    return <QueueMemberBox key={idx} order={idx+1} name={q.name} status={q.status} />
-                })
-            }
-        </div> */}
+        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FFF3DA] from-30% z-10 flex justify-center items-center gap-8">
+            <div className="absolute top-4 left-4 text-lg font-semibold">
+                Total Queue: {queue.length}
+            </div>
+            <div className="absolute top-4 right-4 text-lg font-semibold">
+                Current Queue: <span className="text-[#9479f6]">{(currentQueue === -1) ? "Not started" : (currentQueue >= queue.length) ? "Finished" : "#" + (currentQueue + 1)}</span>
+            </div>
+        </div>
+
      
         
         

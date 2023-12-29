@@ -4,6 +4,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { IQueue, IQueuePerson } from '../../interfaces/queueInterface'
 import { getRoom } from '../../utils/room'
 import { getUUID } from '../../utils/uuid'
+import { LuUser2 } from 'react-icons/lu'
 
 const JoinStatus = () => {
 
@@ -17,6 +18,8 @@ const JoinStatus = () => {
     const [currentQueue, setCurrentQueue] = useState<number>(-1)
     const [ownQueue, setOwnQueue] = useState<number>(-2)
 
+    const [name, setName] = useState<string>("")
+
     function updateRoom(room: IQueue) {
       setQueue(room.queue)
       setCurrentQueue(room.currentQueue)
@@ -29,12 +32,13 @@ const JoinStatus = () => {
       //     return
       // }
       // initDataRef.current = true
-      getRoom(roomid || "").then((roomJson) => {
+      getRoom(roomid || "").then((roomJson: any) => {
           if (roomJson.status && roomJson.status === 404) {
               navigate('/')
           }
           else {
               updateRoom(roomJson as IQueue)
+              setName((roomJson as IQueue).queue.find((e) => e.uuid === getUUID())?.name || "")
           }
       })
     }, [])
@@ -44,16 +48,18 @@ const JoinStatus = () => {
       socket.on(`room${roomid}:update`, (room: IQueue) => updateRoom(room))
     }, [])
 
+
   return (
-    <div className="flex flex-col w-full h-full justify-center items-center bg-[#FFF3DA] gap-6">
+    <div className="flex flex-col w-full h-full justify-center items-center bg-[#FFF3DA] gap-4">
         {
           (currentQueue <= ownQueue) && <>
+            <div className="w-96 flex justify-center items-center font-bold text-xl text-center">
+              Welcome, {name}
+            </div>
+          
             <div className="w-full flex justify-center px-4 font-bold text-xl text-center mb-3">
                 You are in queue&nbsp;<span className="text-[#9479f6]">#{ownQueue + 1}</span>&nbsp;out of {queue.length}
             </div>
-            {/* <div className="w-full flex justify-center px-4 font-bold text-xl text-center">
-                Current Queue: #{currentQueue + 1}
-            </div> */}
             <div className="relative w-96 h-4 mb-4 bg-slate-300 rounded-full ">
               <div 
                 className="h-4 bg-gradient-to-r from-[#D0BFFF] to-[#BEADFA] rounded-full transition-all" 
