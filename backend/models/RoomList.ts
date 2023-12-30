@@ -20,6 +20,11 @@ class RoomList {
         }
         return { status: 404 }
     }
+
+    clean() {
+        const now = Date.now()
+        this.list = this.list.filter((room) => now - room.created < 1000*60*60*24)
+    }
 }
 
 export default RoomList

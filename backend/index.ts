@@ -1,24 +1,32 @@
 import express, { urlencoded, json } from 'express'
-import { Server } from 'socket.io';
 import Room from './models/Room'
 import RoomList from './models/RoomList'
 import cors from 'cors'
 import QueuePerson from './models/QueuePerson'
 import { createServer } from 'http';
+import { Server } from 'socket.io';
+import { useAzureSocketIO } from "@azure/web-pubsub-socket.io"
 
 var app = express()
-const server = createServer(app);
-const io = new Server(server, {
-    cors: {
-      origin: 'http://localhost:3000',
-    },
-  });
-
-var port = process.env.PORT || 7777
-
 app.use(urlencoded({extended: true}))
 app.use(json())
 app.use(cors())
+
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        credentials: true
+    },
+});
+
+useAzureSocketIO(io, {
+    hub: "Hub", // The hub name can be any valid string.
+    connectionString: process.argv[2]
+});
+
+
+var port = process.env.PORT || 7777
 
 
 
@@ -29,6 +37,7 @@ app.get('/', function (req, res) {
 })
 
 app.post('/rooms/create', function (req, res) {
+    roomList.clean()
     const body = req.body
     const newRoom = roomList.create(body.host)
     res.send(newRoom)

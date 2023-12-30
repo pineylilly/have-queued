@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
 
-const URL = process.env.REACT_APP_BACKEND_ENDPOINT || 'http://localhost:7777';
+const URL = process.env.REACT_APP_SOCKET_IO_URL || 'http://localhost:7777';
 
-export const socket = io(URL);
+export const socket = io(URL, { path: process.env.REACT_APP_CLIENT_PATH });
